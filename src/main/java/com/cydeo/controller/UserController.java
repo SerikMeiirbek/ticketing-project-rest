@@ -1,7 +1,9 @@
 package com.cydeo.controller;
 
+import com.cydeo.annotation.DefaultExceptionMessage;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.ResponseWrapper;
+import com.cydeo.exception.TicketingProjectException;
 import com.cydeo.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +52,8 @@ public class UserController {
 
     @DeleteMapping("/{userName}")
     @RolesAllowed("Admin")
-    public ResponseEntity<ResponseWrapper> deleteUserByUserName(@PathVariable("userName") String username){
+    @DefaultExceptionMessage(defaultMessage = "Failed to delete user")
+    public ResponseEntity<ResponseWrapper> deleteUserByUserName(@PathVariable("userName") String username) throws TicketingProjectException {
         userService.delete(username);
         return ResponseEntity.ok(new ResponseWrapper("User is deleted", HttpStatus.OK));
         //return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ResponseWrapper("User is successfully created",HttpStatus.CREATED));
