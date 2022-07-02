@@ -1,10 +1,12 @@
 package com.cydeo.controller;
 
 import com.cydeo.annotation.DefaultExceptionMessage;
+import com.cydeo.annotation.ExecutionTime;
 import com.cydeo.dto.UserDTO;
 import com.cydeo.entity.ResponseWrapper;
 import com.cydeo.exception.TicketingProjectException;
 import com.cydeo.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,15 +24,21 @@ public class UserController {
         this.userService = userService;
     }
 
+
+
+    @ExecutionTime
     @GetMapping
     @RolesAllowed("Admin")
+    @Operation(summary = "Get All Users")
     public ResponseEntity<ResponseWrapper> getAllUsers(){
         List<UserDTO> userDTOList = userService.listAllUsers();
         return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved", userDTOList, HttpStatus.OK));
     }
 
+    @ExecutionTime
     @GetMapping("/{userName}")
     @RolesAllowed("Admin")
+    @Operation(summary = "Get User By Username")
     public ResponseEntity<ResponseWrapper> getUserByUserName(@PathVariable("userName") String userName){
         UserDTO user = userService.findByUserName(userName);
         return ResponseEntity.ok(new ResponseWrapper("User is successfully retrieved", user, HttpStatus.OK));
